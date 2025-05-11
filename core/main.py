@@ -2,28 +2,31 @@ import sys
 from loader.pdf_loader import extract_text
 from preprocessing.cleaner import clean_text
 from preprocessing.chunker import chunk_text
-from embeddings.embedder import get_embeddings, embed_query
+from embeddings.embedder import get_embeddings
 from search.searcher import semantic_search
 from summariser.summarise import summarise_text
 from config import TOP_K_RESULTS
 
 global_mode = "sentence"
-global_chunk_size = 150
-global_overlap = 2
+global_chunk_size = 70
+global_overlap = 1
 
-def handle_pdf_query(pdf_path, user_query):
+def handle_pdf_query(pdf_path, user_query, operation="search"):
     raw_text = extract_text(pdf_path)
-    cleaned = clean_text(raw_text)
-    chunks = chunk_text(cleaned, mode=global_mode, chunk_size=global_chunk_size, overlap=global_overlap)    
-    chunk_vectors = get_embeddings(chunks)
-    # query_vector = embed_query(user_query)
-    results = semantic_search(user_query, chunks, chunk_vectors, TOP_K_RESULTS)
-
-    # combined = "\n".join([text for text, score in results])
-    # summary = summarise_text(combined)
-    # return {"results": results, "summary": summary}
-    # return {"chunks": chunks, "chunk_vectors": chunk_vectors, "query_vector": query_vector}
-    return {"results": results}
+    cleaned = clean_text(raw_text)    
+    
+    # search operation
+    if operation == "search":
+        chunks = chunk_text(cleaned, mode=global_mode, chunk_size=global_chunk_size, overlap=global_overlap)
+        chunk_vectors = get_embeddings(chunks)
+        results = semantic_search(user_query, chunks, chunk_vectors, TOP_K_RESULTS)
+        return {"results": results}
+    # summarise operation
+    elif operation == "summarise":
+       summary = summarise_text(cleaned)
+       return {"summary": clean_text(summary)}
+    else:
+        raise ValueError(f"Unknown operation: {operation}")
 
 def print_semantic_search_result(result):
     '''
@@ -36,7 +39,7 @@ def print_summarise_result(result):
     '''
     Print the result of the summarise_text function.
     '''
-    print("\n[Summary]:\n", result)
+    print("\n[Summary]:\n", result["summary"])
 
 def print_result(result):
     '''
@@ -50,7 +53,7 @@ def print_result(result):
         else:
             print(result[key])
 
-
+# main function
 def main():
     if len(sys.argv) < 2:
         print("Usage: python main.py path/to/file.pdf [mode]")
@@ -58,26 +61,39 @@ def main():
 
     pdf_path = sys.argv[1]
 
-    user_query = ""
+    operation = "search"
     if len(sys.argv) > 2:
-        user_query = sys.argv[2]
-    else:
-        user_query = input("Enter your query: ")    
+        operation = sys.argv[2]
+
+    if operation not in ["search", "summarise"]:
+        print("Invalid operation. Use 'search' or 'summarise'.")
+        return
+
+    user_query = ""
+    if operation == "search":
+        if len(sys.argv) > 3:
+            user_query = sys.argv[3]
+        else:
+            user_query = input("Enter your query: ")    
         if user_query == "":
             user_query = "What is the main idea of the document?"
 
-    if len(sys.argv) > 3:
-        global_mode = sys.argv[3]
     if len(sys.argv) > 4:
-        global_chunk_size = sys.argv[4]
+        global_mode = sys.argv[4]
     if len(sys.argv) > 5:
-        global_overlap = sys.argv[5]
+        global_chunk_size = sys.argv[5]
+    if len(sys.argv) > 6:
+        global_overlap = sys.argv[6]
     
-    response = handle_pdf_query(pdf_path, user_query)
+    response = handle_pdf_query(pdf_path, user_query, operation)
     # print_result(response)
-    print_semantic_search_result(response)
+    if operation == "search":
+        print_semantic_search_result(response)
+    elif operation == "summarise":
+        print_summarise_result(response)
 
 
+# run the main function
 if __name__ == "__main__":
     main()
     

@@ -5,3 +5,4 @@ core/config.py
 .env
 
 __pycache__
+core/config.py

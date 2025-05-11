@@ -9,7 +9,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "gemini-embedding-exp-03-07")
 GEMINI_EMBEDDING_ALT_MODEL_1 = os.getenv("GEMINI_EMBEDDING_ALT_MODEL_1", "models/text-embedding-004")
 GEMINI_EMBEDDING_ALT_MODEL_2 = os.getenv("GEMINI_EMBEDDING_ALT_MODEL_2", "models/embedding-001")
-GEMINI_CHAT_MODEL = os.getenv("GEMINI_CHAT_MODEL", "gemini-pro")
+GEMINI_CHAT_MODEL = os.getenv("GEMINI_CHAT_MODEL", "models/gemini-1.5-flash")
 # GEMINI_EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "models/embedding-001")
 # GEMINI_CHAT_MODEL = os.getenv("GEMINI_CHAT_MODEL", "models/chat")
 
