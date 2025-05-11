@@ -20,3 +20,4 @@ pdfplumber
 nltk
 spacy
 langdetect
+google-generativeai

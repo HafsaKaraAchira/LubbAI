@@ -1,3 +1,7 @@
 core/venv
 core/__pycache__
 *__pycache__
+core/config.py
+.env
+
+__pycache__
