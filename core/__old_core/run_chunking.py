@@ -10,7 +10,7 @@ def print_chunks(chunks):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python run_chunking.py path/to/file.pdf [mode]")
+        print("Usage: python run_chunking.py path/to/file.pdf [mode]",file=sys.stderr)
         return
 
     pdf_path = sys.argv[1]

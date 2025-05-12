@@ -1,3 +1,5 @@
+
+import sys
 import fitz  # PyMuPDF
 from preprocessing.cleaner import remove_headers_footers_page_numbers
 
@@ -7,6 +9,6 @@ def extract_text(pdf_path: str) -> str:
     """
     doc = fitz.open(pdf_path)
     pages = [page.get_text() for page in doc]
-    # print(pages[0])
+    # print(pages[0],file=sys.stderr)
     cleaned_pages = remove_headers_footers_page_numbers(pages)
     return "\n".join(cleaned_pages)

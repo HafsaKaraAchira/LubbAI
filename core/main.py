@@ -1,4 +1,5 @@
 import sys
+import json
 from loader.pdf_loader import extract_text
 from preprocessing.cleaner import clean_text
 from preprocessing.chunker import chunk_text
@@ -11,6 +12,11 @@ global_mode = "sentence"
 global_chunk_size = 70
 global_overlap = 1
 
+
+
+def print_json(data):
+    print(json.dumps(data, ensure_ascii=False))
+
 def handle_pdf_query(pdf_path, user_query, operation="search"):
     raw_text = extract_text(pdf_path)
     cleaned = clean_text(raw_text)    
@@ -20,7 +26,7 @@ def handle_pdf_query(pdf_path, user_query, operation="search"):
         chunks = chunk_text(cleaned, mode=global_mode, chunk_size=global_chunk_size, overlap=global_overlap)
         chunk_vectors = get_embeddings(chunks)
         results = semantic_search(user_query, chunks, chunk_vectors, TOP_K_RESULTS)
-        return {"results": results}
+        return results
     # summarise operation
     elif operation == "summarise":
        summary = summarise_text(cleaned)
@@ -66,15 +72,15 @@ def main():
         operation = sys.argv[2]
 
     if operation not in ["search", "summarise"]:
-        print("Invalid operation. Use 'search' or 'summarise'.")
+        print("Invalid operation. Use 'search' or 'summarise'.",file=sys.stderr)
         return
 
     user_query = ""
     if operation == "search":
         if len(sys.argv) > 3:
             user_query = sys.argv[3]
-        else:
-            user_query = input("Enter your query: ")    
+        # else:
+        #     user_query = input("Enter your query: ")    
         if user_query == "":
             user_query = "What is the main idea of the document?"
 
@@ -85,12 +91,21 @@ def main():
     if len(sys.argv) > 6:
         global_overlap = sys.argv[6]
     
-    response = handle_pdf_query(pdf_path, user_query, operation)
+
+    try:
+        response = handle_pdf_query(pdf_path, user_query, operation)
+        print(f"operation : {operation} completed successfully, lookup the response",file=sys.stderr)
+        print_json(response)
+    except Exception as e:
+        print_json({"error": str(e)})
+        sys.exit(1)
+
+    # response = handle_pdf_query(pdf_path, user_query, operation)
     # print_result(response)
-    if operation == "search":
-        print_semantic_search_result(response)
-    elif operation == "summarise":
-        print_summarise_result(response)
+    # if operation == "search":
+    #     print_semantic_search_result(response)
+    # elif operation == "summarise":
+    #     print_summarise_result(response)
 
 
 # run the main function

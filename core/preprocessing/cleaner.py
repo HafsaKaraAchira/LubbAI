@@ -1,3 +1,4 @@
+import sys
 import re
 from typing import List, Set
 from collections import Counter
@@ -104,7 +105,7 @@ def remove_headers_footers_page_numbers(pages: List[str], n_top=1, n_bottom=1, w
 
         cleaned = [l for l in lines[start:new_end]]
         cleaned_pages.append('\n'.join(cleaned))
-    # print(cleaned_pages[1])
+    # print(cleaned_pages[1],file=sys.stderr)
     return cleaned_pages
 
 def clean_text(text: str) -> str:

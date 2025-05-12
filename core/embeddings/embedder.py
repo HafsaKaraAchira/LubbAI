@@ -1,3 +1,4 @@
+import sys
 import time
 import openai
 from config import OPENAI_API_KEY, OPENAI_EMBEDDING_MODEL, \
@@ -46,18 +47,18 @@ def get_gemini_embeddings(texts: list[str], model: str = GEMINI_EMBEDDING_ALT_MO
         # 1) Embed the chunk
         resp = genai.embed_content(model=model, content=chunk)
         embeddings.append(resp["embedding"])
-        print(f"[{idx}/{total}] chunk embedded")
+        print(f"[{idx}/{total}] chunk embedded", file=sys.stderr)
 
         # 2) After every full batch of RPM_LIMIT chunks, sleep 60s
         #    unless this is the final chunk AND it’s the last operation before the query.
         if idx % GEMINI_RPM_LIMIT == 0:
             if idx < total:
                 # More chunks remain—safe to sleep now
-                print(f"→ Processed {idx}, sleeping 60s before next batch")
+                print(f"→ Processed {idx}, sleeping 60s before next batch",file=sys.stderr)
                 time.sleep(60)
             else:
                 # Exactly hit at the end of chunks: need to sleep before query
-                print("→ Final chunk landed on RPM boundary; sleeping 60s to reserve slot for query")
+                print("→ Final chunk landed on RPM boundary; sleeping 60s to reserve slot for query",file=sys.stderr)
                 time.sleep(60)
 
     return embeddings

@@ -3,6 +3,10 @@ core/__pycache__
 *__pycache__
 core/config.py
 .env
-
-__pycache__
-core/config.py
+_data/*
+*.env
+*package-lock.json
+# node_modules
+server/node_modules
+client/node_modules
+_samples/*
