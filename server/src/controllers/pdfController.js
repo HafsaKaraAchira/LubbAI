@@ -21,31 +21,14 @@ const dataDir = path.resolve(process.env.DATA_DIR || '../_data/');
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
  */
-
-// exports.uploadPDF = async (req, res, next) => {
-//   try {
-//     // req.file.path is the path to the uploaded file
-//     const filePath = req.file.path;        // e.g. "uploads/xyz.pdf"
-
-//     // storePDF may index or persist the PDF
-//     await core.storePDF(filePath);
-
-//     // Return a JSON response to the client
-//     res.json({ message: 'Upload successful', path: filePath });
-//   } catch (err) {
-//     // Pass any errors to the next middleware
-//     next(err);
-//   }
-// };
-
-
 exports.uploadPDF = async (req, res, next) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'Please upload a PDF.' });
         }
-        const filePath = req.file.path;
-        res.json({ message: 'Upload successful', path: `${req.file.filename}` });
+        const fileName = req.file.filename;
+        console.log('File uploaded successfully as: ' + fileName);
+        res.json({ message: 'Upload successful', path: `${fileName}` });
     } catch (err) {
         next(err);
     }

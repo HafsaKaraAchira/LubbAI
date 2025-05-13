@@ -10,3 +10,5 @@ _data/*
 server/node_modules
 client/node_modules
 _samples/*
+
+# client/assets/*[^palette.scss]

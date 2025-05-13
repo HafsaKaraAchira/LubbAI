@@ -9,7 +9,7 @@ function UploadForm({ onUploaded }) {
   const handleSubmit = async e => {
     e.preventDefault();
     const { data } = await uploadPDF(file);
-    onUploaded(data.path);
+    onUploaded(data.path, file);
   };
   return (
     <form onSubmit={handleSubmit}>

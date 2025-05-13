@@ -17,6 +17,9 @@ global_overlap = 1
 def print_json(data):
     print(json.dumps(data, ensure_ascii=False))
 
+def word_count(text):
+    return len(text.strip().split())
+
 def handle_pdf_query(pdf_path, user_query, operation="search"):
     raw_text = extract_text(pdf_path)
     cleaned = clean_text(raw_text)    
@@ -29,8 +32,9 @@ def handle_pdf_query(pdf_path, user_query, operation="search"):
         return results
     # summarise operation
     elif operation == "summarise":
-       summary = summarise_text(cleaned)
-       return {"summary": clean_text(summary)}
+        summary = summarise_text(cleaned)
+        cleaned_word_count = word_count(cleaned)
+        return {"summary": clean_text(summary), "originalWordCount": cleaned_word_count}
     else:
         raise ValueError(f"Unknown operation: {operation}")
 
@@ -45,7 +49,7 @@ def print_summarise_result(result):
     '''
     Print the result of the summarise_text function.
     '''
-    print("\n[Summary]:\n", result["summary"])
+    print("\n[Summary]:\n", result)
 
 def print_result(result):
     '''

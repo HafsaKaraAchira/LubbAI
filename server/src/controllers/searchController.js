@@ -35,8 +35,9 @@ exports.search = async (req, res, next) => {
 exports.summarize = async (req, res, next) => {
   try {
     const { path: filePath } = req.body;
-    const summary = await core.summarizePDF(filePath);
-    res.json({ summary });
+    const result = await core.summarizePDF(filePath);
+    // result: { summary, originalWordCount }
+    res.json(result);
   } catch (err) {
     next(err);
   }

@@ -7,12 +7,15 @@
  */
 
 const express = require('express');
+const cors = require('cors');  // Import the cors package
 const apiRoutes = require('./routes/api');
 const upload = require('./middleware/upload');
 
 require('dotenv').config();
 
 const app = express();
+
+app.use(cors());  // Enable CORS for all routes
 
 // Enable JSON parsing for Express
 app.use(express.json());
