@@ -35,12 +35,9 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Hello World</h1>
-      <div className="app-container">
-        <LeftPanel file={file} filePath={filePath} onUpload={handleUpload} onClear={handleClear} />
-        <RightPanel filePath={filePath} results={results} setResults={setResults} summaryResetKey={summaryResetKey} />
-      </div>
+    <div className="app-container">
+      <LeftPanel file={file} filePath={filePath} onUpload={handleUpload} onClear={handleClear} />
+      <RightPanel filePath={filePath} results={results} setResults={setResults} summaryResetKey={summaryResetKey} />
     </div>
   );
 }

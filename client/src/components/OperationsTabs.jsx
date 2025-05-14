@@ -1,7 +1,7 @@
 // Tabs.jsx
 import React from 'react';
 
-function Tabs({ tabs, active, onChange }) {
+function OperationsTabs({ tabs, active, onChange }) {
   return (
     <div className="tabs">
       {tabs.map(tab => (

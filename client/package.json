@@ -7,10 +7,15 @@
     "build": "react-scripts build"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.1.0",
     "axios": "^1.9.0",
     "multer": "^1.4.5-lts.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-pdf": "^9.2.1",
     "react-scripts": "^5.0.1"
   },
   "browserslist": {
@@ -24,5 +29,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@fontsource/inter": "^5.2.5",
+    "@fontsource/roboto": "^5.2.5",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17"
   }
 }

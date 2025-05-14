@@ -3,98 +3,86 @@
 // src/components/SummaryView.jsx
 import { useState } from 'react';
 import { getSummary } from '../api/api';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import SummarizeIcon from '@mui/icons-material/Notes';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 function wordCount(text) {
   if (!text) return 0;
   return text.trim().split(/\s+/).length;
 }
 
-function SummaryView({ filePath, originalText }) {
-  const [summary, setSummary] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [originalWordCount, setOriginalWordCount] = useState(0);
-  const [summaryWordCount, setSummaryWordCount] = useState(0);
-
-  // Try to get original word count from prop if available
-  // Otherwise, expect API to return it (or fallback to 0)
-  const getOriginalWordCount = () => {
-    if (originalText) return wordCount(originalText);
-    return originalWordCount;
-  };
-
-  const handleGenerateSummary = async () => {
-    if (!filePath) {
-      setError('No file path provided.');
-      return;
-    }
-    setLoading(true);
-    setError('');
-    // Don't clear summary immediately; only clear on successful load or explicit error
-    try {
-      console.log('Requesting summary for filePath:', filePath);
-      const res = await getSummary(filePath);
-      console.log('Summary API response:', res);
-      let summaryData = res.data;
-      let summaryText = summaryData;
-      let origCount = 0;
-      // If API returns { summary, originalWordCount }
-      if (summaryData && typeof summaryData === 'object') {
-        summaryText = summaryData.summary || '';
-        origCount = summaryData.originalWordCount || 0;
-      }
-      if (!summaryText || typeof summaryText !== 'string') {
-        setError('No summary returned from server.');
-        setSummary('');
-        setLoading(false);
-        return;
-      }
-      setSummary(summaryText);
-      const summaryCount = wordCount(summaryText);
-      setSummaryWordCount(summaryCount);
-      // Prefer prop, fallback to API
-      if (originalText) {
-        setOriginalWordCount(wordCount(originalText));
-      } else {
-        setOriginalWordCount(origCount);
-      }
-      setError('');
-    } catch (e) {
-      console.error('Summary fetch error:', e);
-      setError('Failed to fetch summary: ' + (e?.message || e));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-  // Compute reduction percentage
-  const origCount = getOriginalWordCount();
+function SummaryView({ filePath, summary, error, loading, originalWordCount, summaryWordCount, handleGenerateSummary }) {
+  // Compute reduction percentage from props
+  const origCount = originalWordCount;
   const reduction = origCount > 0 ? (100 - (summaryWordCount / origCount) * 100).toFixed(1) : null;
 
   if (!filePath) {
-    return <div><h3>Document Summary</h3><p>No file uploaded. Please upload a PDF to generate a summary.</p></div>;
+    return (
+      <Paper className="summary-paper" elevation={3}>
+        <div className="summary-header">
+          <SummarizeIcon className="summary-icon" />
+          <span>Document Summary</span>
+        </div>
+        <div className="summary-error">No file uploaded. Please upload a PDF to generate a summary.</div>
+      </Paper>
+    );
   }
-  if (error) {
-    return <div><h3>Document Summary</h3><p style={{color: 'red'}}>{error}</p></div>;
-  }
+
   return (
-    <div>
-      <h3>Document Summary</h3>
-      <button onClick={handleGenerateSummary} disabled={loading} style={{ marginBottom: '1em' }}>
-        {loading ? 'Generating...' : summary ? 'Regenerate Summary' : 'Generate Summary'}
-      </button>
-      {summary && !loading && (
-        <div style={{ marginBottom: '1em' }}>
-          <strong>Summary Words:</strong> {summaryWordCount} <br />
-          <strong>Original Words:</strong> {origCount} <br />
-          {origCount > 0 && (
-            <span><strong>Reduction:</strong> {reduction}%</span>
+    <Paper className="summary-paper" elevation={4}>
+      <div className="flex items-center justify-between mb-6">
+        <div className="summary-header">
+          <SummarizeIcon className="summary-icon" />
+          <span>Document Summary</span>
+        </div>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<RefreshIcon />}
+          className="summary-btn"
+          onClick={handleGenerateSummary}
+          disabled={loading}
+        >
+          {loading ? 'Generating...' : summary ? 'Regenerate' : 'Generate'}
+        </Button>
+      </div>
+      <Paper className="summary-stats-paper" elevation={2}>
+        <div className="summary-stats">
+          <div className="summary-stat">
+            <FormatListNumberedIcon className="summary-stat-icon" />
+            <span className="summary-stat-label">Original</span>
+            <span className="summary-stat-value">{origCount}</span>
+          </div>
+          <div className="summary-stat">
+            <SummarizeIcon className="summary-stat-icon" />
+            <span className="summary-stat-label">Summary</span>
+            <span className="summary-stat-value">{summaryWordCount}</span>
+          </div>
+          {reduction && (
+            <div className="summary-stat">
+              <TrendingDownIcon className="summary-stat-icon" />
+              <span className="summary-stat-label">Reduction</span>
+              <span className="summary-stat-value">{reduction}%</span>
+            </div>
           )}
         </div>
+      </Paper>
+      {error && <div className="summary-error">{error}</div>}
+      {loading ? (
+        <div className="summary-loading">Generating summary...</div>
+      ) : (
+        summary && (
+          <Paper className="summary-content-paper" elevation={1}>
+            <div className="summary-content">{summary}</div>
+          </Paper>
+        )
       )}
-      <p>{loading ? 'Generating summary...' : summary}</p>
-    </div>
+    </Paper>
   );
 }
 

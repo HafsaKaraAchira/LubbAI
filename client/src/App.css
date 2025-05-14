@@ -1,51 +1,444 @@
-/* App.css: basic split layout and minimal style */
+@import "@fontsource/inter/index.css";
+@import "@fontsource/roboto/index.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for right panel and tabs remain for now */
+
+@layer components {
+
+  /* app container */
 .app-container {
-  display: flex;
-  height: 100vh;
+  @apply flex h-screen font-inter;
 }
-.left-panel {
-  width: 320px;
-  padding: 24px 16px;
-  border-right: 1px solid #e0e0e0;
-  background: #fafbfc;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  
+  /* left panel styling */
+  .left-panel {
+    @apply h-screen w-[28rem] flex flex-col items-stretch px-3 py-1 bg-custom-caf-noir/90 shadow-2xl font-inter min-h-0;
 }
-.right-panel {
-  flex: 1;
-  padding: 24px 32px;
-  display: flex;
-  flex-direction: column;
+
+  .left-panel-header {
+    @apply flex flex-row items-center justify-start gap-0 min-h-fit mx-auto mt-2 mb-2 w-full bg-white rounded-lg px-0 pr-3 pl-1;
+    min-height: 5.5rem;
 }
-.tabs {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
+
+.vertical-divider {
+    @apply border-l h-10 mx-3 border-custom-caf-noir/40;
 }
-.tabs button {
-  background: none;
-  border: none;
-  font-size: 1.1em;
-  padding: 8px 20px;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
+
+.left-panel-desc {
+    @apply text-xs font-light text-custom-gunmetal/70 break-words w-full max-w-xs;
 }
-.tabs button.active {
-  border-bottom: 2px solid #1976d2;
-  color: #1976d2;
-  font-weight: bold;
+
+  .left-panel-logo {
+    @apply w-auto mr-0 my-1 h-20 rounded-full;
+  }
+  .left-panel-title {
+    @apply text-custom-gunmetal text-4xl font-bold tracking-wide;
+  }
+  .left-panel-content {
+    @apply flex flex-col items-center justify-start w-full flex-1 min-h-0;
 }
-.file-info {
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+
+
+/* upload dropzone styling */
+.upload-dropzone {
+  @apply 
+    w-full max-w-2xl h-full min-h-[65vh] mx-auto
+    flex flex-col items-center justify-center p-8
+    border-[4px] border-dashed border-custom-ruddy-blue rounded-xl
+    bg-custom-baby-powder text-custom-oxford-blue shadow-sm shadow-custom-lion
+    cursor-pointer transition-colors duration-200 outline-none relative
+  ;
 }
-.pdf-preview {
-  margin-top: 8px;
-  background: #f5f5f5;
-  padding: 12px;
-  border-radius: 6px;
-  text-align: center;
+
+.upload-dropzone:hover, .upload-dropzone:focus, .upload-dropzone.dragover {
+  @apply border-custom-ruddy-blue bg-custom-lion/95;
+}
+.upload-dropzone input[type="file"] {
+  @apply hidden;
+}
+/* upload dropzone label styling */
+.upload-dropzone-label {
+  @apply text-lg text-center font-semibold text-custom-oxford-blue 
+    mb-7 select-none transition-colors
+  ;
+}
+.upload-dropzone-label.pre-upload {
+  @apply text-base text-center text-custom-ruddy-blue mb-7 
+  select-none font-medium;
+}
+.upload-dropzone-label.selected {
+  @apply px-1.5 py-1.5 rounded-lg shadow-sm 
+  font-mono tracking-wide italic text-sm text-custom-antiflash-white 
+  bg-custom-gunmetal/60;
+}
+
+.upload-dropzone-label, .upload-dropzone-label.selected {
+  @apply flex flex-col items-center justify-center 
+  border-4 border-dashed border-custom-caf-noir
+  bg-custom-caf-noir/20 rounded-2xl shadow-sm py-8 px-4 
+  transition-all duration-300 cursor-pointer;
+}
+
+.upload-dropzone-label.selected {
+  @apply border-none bg-custom-ruddy-blue text-custom-antiflash-white
+  p-3 rounded-md
+  ;
+}
+
+.upload-icon-label {
+  @apply flex flex-col items-center justify-center;
+}
+
+.upload-zone-icon {
+  @apply mb-2 text-custom-caf-noir;
+}
+
+.upload-zone-label {
+  @apply text-custom-caf-noir font-bold text-lg text-center;
+}
+
+.left-panel-fileinfo {
+    @apply mb-0 w-full flex flex-col min-h-0 shrink-0;
+}
+.left-panel-fileinfo-row {
+    @apply flex flex-row items-baseline gap-2 w-full min-h-0 max-h-[2.5rem] shrink-0 mb-0 pb-0 h-fit;
+}
+
+.left-panel-filename {
+    @apply flex-1 
+    text-left italic text-xs text-custom-oxford-blue 
+    bg-custom-antiflash-white 
+    px-3 py-1 rounded-lg shadow font-mono tracking-wide overflow-hidden whitespace-nowrap text-ellipsis;
+    min-width: 0;
+}
+
+.clear-btn {
+    @apply px-4 py-2 rounded-lg font-semibold bg-custom-caf-noir/60 text-custom-antiflash-white transition-colors duration-200 shadow hover:bg-custom-ruddy-blue hover:text-white;
+    filter: saturate(0.5);
+}
+.clear-btn:hover {
+    filter: saturate(1);
+
+}
+
+.pdf-preview-panel {
+    @apply w-full flex-1 min-h-0 flex flex-col items-start justify-center p-0 bg-gradient-to-br from-custom-antiflash-white/80 to-custom-caf-noir/10 overflow-hidden h-full;
+    border-radius: 1rem;
+    margin-top: 0;
+    max-height: 70vh;
+}
+
+.pdf-preview-content {
+    @apply w-full h-full flex-1 min-h-0 flex flex-col items-center justify-center bg-white/80 overflow-hidden relative;
+    border-radius: 1rem;
+}
+
+.pdf-preview-page {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    display: block;
+}
+
+
+
+  /* upload filename success styling */
+  .upload-filename-success {
+    @apply flex items-center justify-center w-full;
+    gap: 0.5rem;
+  }
+
+  .upload-filename-icon {
+    @apply h-5 w-5 text-custom-ruddy-blue flex-shrink-0
+     align-middle
+    ;
+  }
+  
+  /* upload dropzone description styling */
+  .upload-dropzone-desc {
+    @apply text-sm text-center text-custom-ruddy-blue mb-4;
+  }
+
+  /* upload button styling */
+  .upload-btn {
+    @apply mt-4 px-6 py-2 rounded font-semibold transition-colors duration-200 outline-none shadow;
+  }
+
+  .upload-btn.selected {
+    @apply bg-custom-caf-noir text-custom-antiflash-white 
+    hover:bg-custom-caf-noir/80 hover:text-custom-antiflash-white
+    ;
+  }
+
+  /* left panel file info */
+  .left-panel-fileinfo {
+    @apply mt-4 space-y-1 mb-3;
+  }
+  .left-panel-filename {
+    @apply block w-full text-center italic text-xs
+     text-custom-oxford-blue bg-custom-antiflash-white 
+     px-4 py-1 rounded-lg shadow font-mono mb-2
+     tracking-wide
+    ;
+  }
+
+  .clear-btn {
+    @apply rounded m-auto mt-2 mb-0 px-4 py-1 text-xs
+     bg-custom-ruddy-blue text-custom-antiflash-white font-semibold 
+     hover:bg-custom-ruddy-blue/80 hover:text-white transition-colors block;
+    /* @apply mt-4 px-4 py-1 text-xs rounded bg-ruddy-blue text-white font-semibold hover:bg-oxford-blue transition-colors block mx-auto; */
+  }
+
+  /* pdf preview panel */
+  .pdf-preview-panel {
+    @apply flex-1 flex flex-col h-full min-h-[70vh]
+    bg-white rounded-xl  p-2
+    ;
+  }
+  .pdf-preview-content {
+    @apply flex-1 overflow-y-auto flex justify-center items-center
+    ;
+  }
+  .pdf-preview-empty {
+    @apply bg-white rounded-xl flex items-center justify-center h-full p-4;
+  }
+  .pdf-preview-empty-label {
+    @apply text-gray-500 text-sm;
+  }
+  .pdf-preview-loading {
+    @apply text-gray-500;
+  }
+  .pdf-preview-error {
+    @apply text-red-500;
+  }
+  .pdf-preview-page {
+    @apply w-full max-w-xs mx-auto shadow;
+  }
+  .pdf-preview-nav {
+    @apply absolute left-1/2 bottom-2 -translate-x-1/2 flex flex-row items-center bg-white/90 rounded-lg shadow px-3 py-1 z-10;
+
+    @apply flex items-center justify-center mt-2 space-x-2;
+  }
+  .pdf-nav-btn {
+    @apply bg-custom-ruddy-blue text-white px-1 py-1 rounded-2xl disabled:opacity-50;
+  }
+  .pdf-nav-label {
+    @apply text-xs;
+  }
+
+  /* right panel and tabs */
+  .right-panel {
+    @apply flex flex-col flex-1 h-full bg-gradient-to-br from-custom-antiflash-white/80 to-custom-baby-powder/60 rounded-3xl shadow-xl p-0 overflow-hidden border border-custom-lion/40 backdrop-blur-lg;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+  }
+  .right-panel-tabs {
+    @apply flex justify-center items-center w-fit mx-auto mt-6 mb-6 rounded-full bg-custom-antiflash-white p-1 shadow-lg;
+    border: none;
+    gap: 0;
+  }
+  .right-panel-tab {
+    @apply px-6 py-2 rounded-full font-semibold text-base outline-none transition-colors duration-200 bg-transparent text-custom-gunmetal 
+     focus:outline-none focus-visible:ring-2 focus-visible:ring-custom-ruddy-blue shadow-none;
+     /* hover:bg-custom-ruddy-blue/10 */
+    min-width: 0;
+    border: none;
+    box-shadow: none;
+    position: relative;
+    z-index: 1;
+  }
+  .right-panel-tab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: box-shadow 0.2s, opacity 0.2s;
+  }
+  .right-panel-tab:hover::before {
+    opacity: 1;
+    box-shadow:  inset 0 1.5px 8px 0 rgba(80,110,255,0.12);
+    /* 0 0px 10px 0 rgba(80,110,255,0.13), */
+  }
+  .Mui-selected.right-panel-tab::before {
+    opacity: 1;
+    box-shadow: 0 4px 24px 0 rgba(31,38,135,0.16), inset 0 1.5px 12px 0 rgba(80,110,255,0.14);
+  }
+  .Mui-selected.right-panel-tab {
+    @apply bg-custom-ruddy-blue text-white rounded-full;
+    color: theme('colors.custom-antiflash-white') !important;
+    border: none;
+    z-index: 1;
+  }
+  .right-panel-tab-content {
+    @apply flex-1 flex flex-col p-6 overflow-y-auto;
+  }
+  .right-panel-tab-header {
+    @apply mb-6 sticky top-0 z-10 
+    bg-custom-lion/100 
+    p-4 rounded-3xl shadow-xl border border-custom-lion/40;
+    backdrop-filter: blur(10px);
+  }
+  .right-panel-results {
+    @apply flex-1 h-full min-h-0 w-full flex flex-col items-center justify-start;
+  }
+  .results-list-scrollable {
+    @apply flex-1 h-full min-h-0 w-full max-w-3xl mx-auto flex flex-col gap-1 p-4
+     rounded-3xl shadow-2xl 
+     bg-custom-lion border border-custom-lion/30;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #e0e0e0 #f7f7f7;
+  }
+  .results-list-scrollable::-webkit-scrollbar {
+    width: 8px;
+    background: #f7f7f7;
+    border-radius: 100px;
+  }
+  .results-list-scrollable::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: 100px;
+  }
+  .result-card {
+    @apply flex flex-col w-full max-w-full min-w-0 rounded-[3rem] p-4;
+}
+.result-paper {
+    @apply bg-white/95 rounded-[2rem] shadow-xl p-2 border border-custom-antiflash-white/60;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+.result-title {
+    @apply font-semibold text-custom-caf-noir mb-1 text-base;
+}
+.result-body {
+    @apply text-custom-gunmetal text-sm break-words flex-1 mb-2;
+}
+.result-footer {
+    @apply flex items-center justify-end mt-auto;
+}
+.result-chunk {
+    @apply text-custom-gunmetal text-base break-words;
+}
+  .result-score {
+    @apply inline-block px-4 py-1 rounded-full 
+    bg-custom-lion/90 
+    text-custom-caf-noir font-bold text-sm shadow-md tracking-wide mt-1 self-end;
+    /* more prominent pill highlight for score */
+  }
+  .no-results {
+    @apply text-custom-caf-noir text-center py-16;
+  }
+  .right-panel-summary {
+    @apply flex-1 overflow-y-auto flex flex-col items-center justify-start px-2;
+}
+.summary-paper {
+    @apply w-full max-w-full mx-auto mt-4 bg-custom-lion/90 rounded-2xl shadow-lg p-2 
+    border border-custom-lion/50 flex flex-col gap-1;
+}
+
+.summary-stats-paper {
+    @apply w-full bg-custom-baby-powder/60 rounded-xl shadow p-2 mb-2 flex flex-col;
+}
+
+.summary-content-paper {
+    @apply w-full bg-white/95 rounded-xl shadow p-3 border border-custom-antiflash-white/40;
+}
+
+.summary-btn {
+    @apply rounded-full px-6 py-2 font-bold shadow-lg text-base transition-all duration-200
+    bg-custom-lion text-custom-oxford-blue hover:bg-custom-caf-noir hover:text-custom-antiflash-white focus:outline-none focus:ring-2 focus:ring-custom-lion/60;
+}
+.summary-stat-label {
+    @apply text-custom-gunmetal font-semibold ml-1 text-sm truncate;
+}
+
+.summary-stat-value {
+    @apply text-custom-caf-noir font-bold ml-1 text-sm;
+}
+
+
+.summary-header {
+    @apply flex items-center gap-2 mb-2 text-custom-caf-noir text-xl font-bold;
+}
+
+.summary-icon {
+    @apply text-custom-caf-noir text-2xl drop-shadow-lg;
+}
+
+.summary-stats {
+    @apply flex flex-row gap-x-4 gap-y-2 mb-1 w-full justify-center;
+}
+
+
+.summary-stat {
+    @apply flex items-center gap-1 rounded-lg bg-custom-lion px-3 py-1 shadow font-semibold text-custom-caf-noir text-sm whitespace-nowrap overflow-hidden;
+}
+
+
+.summary-stat-icon {
+    @apply text-custom-caf-noir text-xl;
+}
+.summary-content {
+    @apply bg-white/95 rounded-xl shadow-none p-0 
+    text-custom-caf-noir text-sm leading-relaxed font-normal border-0;
+}
+
+.summary-error {
+    @apply text-red-600 text-center font-semibold py-4;
+}
+.summary-loading {
+    @apply text-custom-caf-noir text-center py-10 text-lg;
+}
+
+  .right-panel-search {
+    @apply flex flex-col h-full;
+  }
+  /* search bar styles */
+  .search-bar-container {
+    @apply flex w-full items-center bg-white rounded-full px-5 py-2 shadow-2xl border border-custom-lion/40 backdrop-blur-lg;
+    box-shadow: 0 8px 36px 0 rgba(31,38,135,0.13);
+    transition: box-shadow 0.2s, border 0.2s;
+  }
+  .search-bar-container:focus-within {
+    box-shadow: 0 0 0 4px theme('colors.custom-ruddy-blue' / 0.22), 0 6px 32px 0 rgba(31,38,135,0.13);
+    border-color: theme('colors.custom-ruddy-blue');
+  }
+  .search-bar-input {
+    @apply flex-1 bg-transparent rounded-full px-3 py-2 text-custom-gunmetal placeholder-custom-lion focus:outline-none transition-all;
+    font-size: 1.12rem;
+    border: none;
+    box-shadow: none;
+  }
+  .search-bar-input-inner {
+    @apply bg-transparent placeholder-custom-lion text-custom-gunmetal font-medium;
+    border: none;
+    box-shadow: none;
+  }
+  .search-bar-btn {
+    @apply ml-2 
+    bg-custom-caf-noir text-custom-antiflash-white 
+    rounded-full shadow-xl p-3 transition-all duration-200 border-2 
+    border-custom-ruddy-blue 
+    hover:bg-custom-lion hover:text-custom-oxford-blue hover:border-custom-lion 
+    focus:outline-none focus:ring-2 focus:ring-custom-ruddy-blue/60;
+    background-color: theme('colors.custom-ruddy-blue') !important;
+    box-shadow: 0 4px 18px 0 rgba(31,38,135,0.17);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .search-bar-btn .MuiSvgIcon-root {
+    @apply text-custom-antiflash-white text-xl;
+    color: theme('colors.custom-antiflash-white') !important;
+    filter: drop-shadow(0 1px 2px rgba(31,38,135,0.13));
+  }
 }
