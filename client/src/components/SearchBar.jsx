@@ -55,7 +55,7 @@ function SearchBar({ filePath, onResults, onLoadingChange, query, setQuery, setL
         }}
         multiline
         minRows={1}
-        maxRows={2}
+        maxRows={1}
         onKeyDown={e => {
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
